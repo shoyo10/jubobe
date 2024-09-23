@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"context"
+	"jubobe/internal/delivery/http"
+	"jubobe/internal/repository/pg"
+	"jubobe/internal/service"
 	"jubobe/pkg/config"
 	"jubobe/pkg/echorouter"
 	"jubobe/pkg/postgres"
@@ -28,16 +31,18 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	zerolog.Init(cfg.Log)
-	_, err = postgres.New(cfg.Postgre)
-	if err != nil {
-		log.Error().Msg(err.Error())
-		return
-	}
 
 	app := fx.New(
 		fx.Supply(*cfg),
 		fx.Provide(
 			echorouter.FxNewEcho,
+			postgres.New,
+			pg.New,
+			service.New,
+			http.NewHandler,
+		),
+		fx.Invoke(
+			http.SetRoutes,
 		),
 	)
 
