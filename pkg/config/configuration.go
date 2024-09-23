@@ -27,9 +27,9 @@ func Set(config *Config) {
 type Config struct {
 	fx.Out
 
-	Log     *zerolog.Config    `yaml:"log"`
-	HTTP    *echorouter.Config `yaml:"http"`
-	Postgre *postgres.Config   `yaml:"postgres"`
+	Log      *zerolog.Config    `yaml:"log"`
+	HTTP     *echorouter.Config `yaml:"http"`
+	Postgres *postgres.Config   `yaml:"postgres"`
 }
 
 // New read config from file

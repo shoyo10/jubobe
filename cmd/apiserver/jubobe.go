@@ -1,4 +1,4 @@
-package cmd
+package apiserver
 
 import (
 	"context"
@@ -27,7 +27,6 @@ func run(cmd *cobra.Command, args []string) {
 	cfg, err := config.New()
 	if err != nil {
 		os.Exit(1)
-		return
 	}
 
 	zerolog.Init(cfg.Log)

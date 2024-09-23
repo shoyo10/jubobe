@@ -52,7 +52,7 @@ func New(cfg *Config) (*gorm.DB, error) {
 		log.Error().Msgf("main: database connect err: %s", err.Error())
 		return nil, err
 	}
-	log.Info().Msgf("database ping success")
+	log.Info().Msg("database ping success")
 
 	sqlDB, err := conn.DB()
 	if err != nil {
