@@ -2,6 +2,7 @@ package config
 
 import (
 	"jubobe/pkg/echorouter"
+	"jubobe/pkg/postgres"
 	"jubobe/pkg/zerolog"
 
 	"github.com/mitchellh/mapstructure"
@@ -26,8 +27,9 @@ func Set(config *Config) {
 type Config struct {
 	fx.Out
 
-	Log  *zerolog.Config    `yaml:"log"`
-	HTTP *echorouter.Config `yaml:"http"`
+	Log     *zerolog.Config    `yaml:"log"`
+	HTTP    *echorouter.Config `yaml:"http"`
+	Postgre *postgres.Config   `yaml:"postgres"`
 }
 
 // New read config from file

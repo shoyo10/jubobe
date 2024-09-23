@@ -4,6 +4,7 @@ import (
 	"context"
 	"jubobe/pkg/config"
 	"jubobe/pkg/echorouter"
+	"jubobe/pkg/postgres"
 	"jubobe/pkg/zerolog"
 	"os"
 	"time"
@@ -27,6 +28,11 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	zerolog.Init(cfg.Log)
+	_, err = postgres.New(cfg.Postgre)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		return
+	}
 
 	app := fx.New(
 		fx.Supply(*cfg),
