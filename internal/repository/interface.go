@@ -9,6 +9,7 @@ import (
 
 type Repositorier interface {
 	PatientRepo
+	OrderRepo
 }
 
 type PatientRepo interface {
@@ -24,4 +25,28 @@ func (o *PatientOption) Preload(db *gorm.DB) *gorm.DB {
 		db = db.Preload("Order")
 	}
 	return db
+}
+
+type OrderRepo interface {
+	CreateOrder(ctx context.Context, order *model.Order) error
+	UpdateOrder(ctx context.Context, opt *OrderOption, in UpdateOrderInput) error
+}
+
+type OrderOption struct {
+	Filter OrderFilter
+}
+
+type OrderFilter struct {
+	ID int
+}
+
+func (o *OrderFilter) Where(db *gorm.DB) *gorm.DB {
+	if o.ID != 0 {
+		db = db.Where("id = ?", o.ID)
+	}
+	return db
+}
+
+type UpdateOrderInput struct {
+	Message string
 }

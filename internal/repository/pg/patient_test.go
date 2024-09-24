@@ -105,4 +105,17 @@ func (s *patientDBSuite) TestListPatients() {
 	s.Len(patients, 1)
 	s.Equal("John Doe", patients[0].Name)
 	s.Equal("msg 123", patients[0].Order.Message)
+
+	// test list with two patient
+	p = model.Patient{
+		Name: "Jay",
+	}
+	err = s.conn.Create(&p).Error
+	s.Require().NoError(err)
+
+	patients, err = s.repo.ListPatients(s.ctx, nil)
+	s.Require().NoError(err)
+	s.Len(patients, 2)
+	s.Equal("John Doe", patients[0].Name)
+	s.Equal("Jay", patients[1].Name)
 }
