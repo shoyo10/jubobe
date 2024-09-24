@@ -15,3 +15,9 @@ pgmigrate:
 
 pgrollback:
 	CONFIG_DIR=${pwd}/configs go run ./main.go pgmigration rollback
+
+local-deploy-up:
+	docker-compose -f deployment/docker-compose.yml up -d
+
+local-deploy-down:
+	docker-compose -f deployment/docker-compose.yml down
