@@ -24,3 +24,6 @@ local-deploy-down:
 
 mockgen:
 	mockgen -source internal/service/interface.go -destination=internal/service/mocks/mock_service.go -package=mocks
+
+swagger:
+	swag init -g internal/delivery/http/route.go

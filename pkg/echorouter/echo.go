@@ -8,7 +8,10 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"go.uber.org/fx"
+
+	_ "jubobe/docs"
 )
 
 // Config setting http config
@@ -43,6 +46,7 @@ func NewEcho(cfg *Config) *echo.Echo {
 	e.Use(MiddlewareRecover())
 
 	e.Validator = &CustomValidator{validator: validator.New()}
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	setDefaultRoute(e, cfg)
 

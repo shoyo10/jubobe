@@ -1,0 +1,81 @@
+basePath: /
+definitions:
+  errors.HTTPError:
+    properties:
+      code:
+        type: string
+      message: {}
+    type: object
+  http.createOrderReq:
+    properties:
+      Message:
+        maxLength: 255
+        minLength: 1
+        type: string
+      PatientId:
+        minimum: 1
+        type: integer
+    type: object
+  http.createOrderResp:
+    properties:
+      data:
+        $ref: '#/definitions/http.createOrderRespData'
+    type: object
+  http.createOrderRespData:
+    properties:
+      id:
+        type: integer
+    type: object
+  http.listPatientsResp:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.listPatientsRespData'
+        type: array
+    type: object
+  http.listPatientsRespData:
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      OrderId:
+        type: integer
+    type: object
+host: localhost:9090
+info:
+  contact:
+    name: Shoyo
+    url: https://github.com/shoyo10/jubobe
+  description: This is jubo backend api document.
+  title: Jubobe API Document
+  version: "1.0"
+paths:
+  /orders:
+    post:
+      description: create a order
+      parameters:
+      - description: order fields
+        in: body
+        name: reqBody
+        required: true
+        schema:
+          $ref: '#/definitions/http.createOrderReq'
+      responses:
+        "200":
+          description: order id
+          schema:
+            $ref: '#/definitions/http.createOrderResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.HTTPError'
+  /patients:
+    get:
+      description: list all patients
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.listPatientsResp'
+swagger: "2.0"
