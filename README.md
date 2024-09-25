@@ -2,6 +2,32 @@
 
 A RESTful jubo backend API application
 
+## Makefile
+
+### Local run
+
+First start PostgreSQL server
+
+`$ make local-deploy-up`
+
+Second migrate database
+
+`$ make pgmigrate`
+
+Third run API server
+
+`$ make jubobe`
+
+### Run unit test
+
+*Befer running test, make sure you already do the first step in local run description*
+
+`$ make unit-test`
+
+## API Usage
+
+After running API server, a quick way to play the APIs is to open the swagger UI: http://127.0.0.1:9090/swagger/index.html
+
 ## Project layout
 
 * cmd: for CLI commands
@@ -40,29 +66,3 @@ Here are the mainly used packages to build the jubo backend server
 * gorm: orm
 * echo-swagger: generate swagger document & UI
 * go-gormigrate: migrate DB table
-
-## Makefile
-
-### Local run
-
-First start PostgreSQL server
-
-`$ make local-deploy-up`
-
-Second migrate database
-
-`$ make pgmigrate`
-
-Third run API server
-
-`$ make jubobe`
-
-### Run unit test
-
-*Befer running test, make sure you already do the first step in local run description*
-
-`$ make unit-test`
-
-## API Usage
-
-After running API server, a quick way to play the APIs is to open the swagger UI: http://127.0.0.1:9090/swagger/index.html
