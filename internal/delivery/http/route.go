@@ -18,5 +18,5 @@ import (
 func SetRoutes(e *echo.Echo, h Handler) {
 	e.GET("/patients", h.ListPatients)
 	e.POST("/orders", h.CreateOrder)
-	// e.PUT("/orders/:id", h.UpdateOrder)
+	e.PUT("/orders/:id", h.UpdateOrder)
 }

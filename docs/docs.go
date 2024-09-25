@@ -48,6 +48,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/orders/{id}": {
+            "put": {
+                "description": "update a order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "order id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update order fields",
+                        "name": "reqBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.updateOrderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/patients": {
             "get": {
                 "description": "list all patients",
@@ -89,7 +129,7 @@ const docTemplate = `{
         "http.createOrderResp": {
             "type": "object",
             "properties": {
-                "data": {
+                "Data": {
                     "$ref": "#/definitions/http.createOrderRespData"
                 }
             }
@@ -97,7 +137,7 @@ const docTemplate = `{
         "http.createOrderRespData": {
             "type": "object",
             "properties": {
-                "id": {
+                "Id": {
                     "type": "integer"
                 }
             }
@@ -105,7 +145,7 @@ const docTemplate = `{
         "http.listPatientsResp": {
             "type": "object",
             "properties": {
-                "data": {
+                "Data": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/http.listPatientsRespData"
@@ -124,6 +164,16 @@ const docTemplate = `{
                 },
                 "OrderId": {
                     "type": "integer"
+                }
+            }
+        },
+        "http.updateOrderReq": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
                 }
             }
         }

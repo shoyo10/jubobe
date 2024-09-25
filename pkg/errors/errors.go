@@ -19,9 +19,10 @@ func (e *_err) Error() string {
 }
 
 var (
-	ErrInvalidInput        = &_err{Code: "400001", Message: "one of the input is invalid", HTTPCode: http.StatusBadRequest}
-	ErrResourceNotFound    = &_err{Code: "404001", Message: "resource not found", HTTPCode: http.StatusNotFound}
-	ErrInternalServerError = &_err{Code: "500001", Message: "internal server error", HTTPCode: http.StatusInternalServerError}
+	ErrInvalidInput          = &_err{Code: "400001", Message: "one of the input is invalid", HTTPCode: http.StatusBadRequest}
+	ErrResourceNotFound      = &_err{Code: "404001", Message: "resource not found", HTTPCode: http.StatusNotFound}
+	ErrResourceAlreadyExists = &_err{Code: "409001", Message: "resource already exists", HTTPCode: http.StatusConflict}
+	ErrInternalServerError   = &_err{Code: "500001", Message: "internal server error", HTTPCode: http.StatusInternalServerError}
 )
 
 // New new error with stack

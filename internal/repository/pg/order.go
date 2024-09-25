@@ -4,16 +4,11 @@ import (
 	"context"
 	"jubobe/internal/model"
 	"jubobe/pkg/errors"
-
-	"gorm.io/gorm"
 )
 
 func (r *repo) CreateOrder(ctx context.Context, order *model.Order) error {
 	err := r.Ctx(ctx).Omit("id").Create(order).Error
-	if err != nil {
-		return errors.Wrapf(errors.ErrInternalServerError, "%v", err)
-	}
-	return nil
+	return errors.Wrapf(errors.ConvertPostgresError(err), "%v", err)
 }
 
 func (r *repo) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model.UpdateOrderInput) error {
@@ -24,10 +19,7 @@ func (r *repo) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model
 	result := db.Model(&model.Order{}).Updates(in)
 	rawEffected, err := result.RowsAffected, result.Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.Wrapf(errors.ErrResourceNotFound, "%v", err)
-		}
-		return errors.Wrapf(errors.ErrInternalServerError, "%v", err)
+		errors.Wrapf(errors.ConvertPostgresError(err), "%v", err)
 	}
 	if rawEffected == 0 {
 		return errors.WithStack(errors.ErrResourceNotFound)

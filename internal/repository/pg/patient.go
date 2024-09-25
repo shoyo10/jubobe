@@ -14,7 +14,7 @@ func (r *repo) ListPatients(ctx context.Context, opt *model.PatientOption) ([]mo
 	}
 	err := db.Find(&patients).Error
 	if err != nil {
-		return nil, errors.Wrapf(errors.ErrInternalServerError, "%v", err)
+		return nil, errors.Wrapf(errors.ConvertPostgresError(err), "%v", err)
 	}
 	return patients, err
 }

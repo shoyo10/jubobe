@@ -4,6 +4,7 @@ import (
 	"jubobe/internal/model"
 	"jubobe/internal/service"
 	"jubobe/pkg/errors"
+	"net/http"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -21,7 +22,7 @@ func NewHandler(svc service.Servicer) Handler {
 }
 
 type listPatientsResp struct {
-	Data []listPatientsRespData `json:"data"`
+	Data []listPatientsRespData `json:"Data"`
 }
 
 type listPatientsRespData struct {
@@ -63,11 +64,11 @@ type createOrderReq struct {
 }
 
 type createOrderResp struct {
-	Data createOrderRespData `json:"data"`
+	Data createOrderRespData `json:"Data"`
 }
 
 type createOrderRespData struct {
-	ID int `json:"id"`
+	ID int `json:"Id"`
 }
 
 // @Title  CreateOrder
@@ -98,4 +99,57 @@ func (h *handler) CreateOrder(c echo.Context) error {
 		return err
 	}
 	return c.JSON(200, createOrderResp{Data: createOrderRespData{ID: newOrder.ID}})
+}
+
+type updateOrderReq struct {
+	Message string `json:"Message" validate:"gte=1,lte=255"`
+}
+
+type updateOrderParam struct {
+	ID int `param:"id" validate:"gte=1"`
+}
+
+// @Title  UpdateOrder
+// @Description update a order
+// @Param id path int true "order id"
+// @Param reqBody body updateOrderReq true "update order fields"
+// @Success 200
+// @Failure 400 object errors.HTTPError
+// @Failure 404 object errors.HTTPError
+// @Router /orders/{id} [put]
+func (h *handler) UpdateOrder(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	var req updateOrderReq
+	err := c.Bind(&req)
+	if err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+
+	req.Message = strings.TrimSpace(req.Message)
+	if err := c.Validate(&req); err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+
+	var pathParam updateOrderParam
+	err = (&echo.DefaultBinder{}).BindPathParams(c, &pathParam)
+	if err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+	if err := c.Validate(&pathParam); err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+
+	err = h.svc.UpdateOrder(ctx, &model.OrderOption{
+		Filter: model.OrderFilter{
+			ID: pathParam.ID,
+		}},
+		model.UpdateOrderInput{
+			Message: req.Message,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return c.NoContent(http.StatusOK)
 }

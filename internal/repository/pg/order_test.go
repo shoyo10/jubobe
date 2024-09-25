@@ -2,9 +2,11 @@ package pg
 
 import (
 	"context"
+
 	"jubobe/internal/model"
 	"jubobe/internal/repository"
 	"jubobe/pkg/config"
+	"jubobe/pkg/errors"
 	"jubobe/pkg/postgres"
 	"log"
 	"os"
@@ -90,6 +92,10 @@ func (s *orderDBSuite) TestCreateOrder() {
 	s.Equal(order.ID, order2.ID)
 	s.Equal(order.PatientID, order2.PatientID)
 	s.Equal(order.Message, order2.Message)
+
+	// test duplicate patient id
+	err = s.repo.CreateOrder(s.ctx, order)
+	s.Require().True(errors.Is(err, errors.ErrResourceAlreadyExists))
 }
 
 func (s *orderDBSuite) TestUpdateOrder() {
@@ -117,4 +123,9 @@ func (s *orderDBSuite) TestUpdateOrder() {
 	s.Equal(order.ID, order2.ID)
 	s.Equal(order.PatientID, order2.PatientID)
 	s.Equal(newMessage, order2.Message)
+
+	// update not exist order id
+	orderOpt.Filter.ID = 999
+	err = s.repo.UpdateOrder(s.ctx, orderOpt, model.UpdateOrderInput{Message: newMessage})
+	s.Require().True(errors.Is(err, errors.ErrResourceNotFound))
 }

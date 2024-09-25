@@ -18,17 +18,17 @@ definitions:
     type: object
   http.createOrderResp:
     properties:
-      data:
+      Data:
         $ref: '#/definitions/http.createOrderRespData'
     type: object
   http.createOrderRespData:
     properties:
-      id:
+      Id:
         type: integer
     type: object
   http.listPatientsResp:
     properties:
-      data:
+      Data:
         items:
           $ref: '#/definitions/http.listPatientsRespData'
         type: array
@@ -41,6 +41,13 @@ definitions:
         type: string
       OrderId:
         type: integer
+    type: object
+  http.updateOrderReq:
+    properties:
+      Message:
+        maxLength: 255
+        minLength: 1
+        type: string
     type: object
 host: localhost:9090
 info:
@@ -68,6 +75,32 @@ paths:
             $ref: '#/definitions/http.createOrderResp'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.HTTPError'
+  /orders/{id}:
+    put:
+      description: update a order
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update order fields
+        in: body
+        name: reqBody
+        required: true
+        schema:
+          $ref: '#/definitions/http.updateOrderReq'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.HTTPError'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/errors.HTTPError'
   /patients:
