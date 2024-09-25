@@ -1,6 +1,7 @@
 package http
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"io"
@@ -76,6 +77,45 @@ func (s *handlerSuite) TestListPatients() {
 	s.Require().Equal(2, resp.Data[1].ID)
 	s.Require().Equal("Doe", resp.Data[1].Name)
 	s.Require().Equal(1, resp.Data[1].OrderID)
+}
+
+func (s *handlerSuite) TestCreateOrder() {
+	req := createOrderReq{
+		PatientID: 1,
+		Message:   "   Hello   ",
+	}
+	expectNewOrder := &model.Order{
+		PatientID: 1,
+		Message:   "Hello",
+	}
+	s.mockSvc.EXPECT().CreateOrder(gomock.Any(), expectNewOrder).DoAndReturn(func(_ context.Context, in *model.Order) error {
+		in.ID = 1
+		return nil
+	}).Times(1)
+	body, _ := json.Marshal(req)
+	rec := request(http.MethodPost, "/orders", bytes.NewReader(body), s.e)
+	s.Require().Equal(http.StatusOK, rec.Code)
+	var resp createOrderResp
+	json.Unmarshal(rec.Body.Bytes(), &resp)
+	s.Require().Equal(1, resp.Data.ID)
+}
+
+func (s *handlerSuite) TestUpdateOrder() {
+	req := updateOrderReq{
+		Message: "   Hello   ",
+	}
+	expectUpdateOrder := model.UpdateOrderInput{
+		Message: "Hello",
+	}
+	expectOpt := &model.OrderOption{
+		Filter: model.OrderFilter{
+			ID: 1,
+		},
+	}
+	s.mockSvc.EXPECT().UpdateOrder(gomock.Any(), expectOpt, expectUpdateOrder).Return(nil).Times(1)
+	body, _ := json.Marshal(req)
+	rec := request(http.MethodPut, "/orders/1", bytes.NewReader(body), s.e)
+	s.Require().Equal(http.StatusOK, rec.Code)
 }
 
 func request(method, path string, body io.Reader, e *echo.Echo) *httptest.ResponseRecorder {
