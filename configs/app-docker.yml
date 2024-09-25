@@ -1,0 +1,15 @@
+log:
+  debug: true
+  local: true
+  app_id: jubobe
+  env: dev
+http:
+  debug: true
+  address: ":9090"
+  disable_pprof: false
+postgres:
+  host: 172.17.0.1
+  port: 5432
+  username: postgres
+  password: postgres
+  dbname: postgres

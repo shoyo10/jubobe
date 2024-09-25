@@ -27,3 +27,6 @@ mockgen:
 
 swagger:
 	swag init -g internal/delivery/http/route.go
+
+docker-build:
+	docker build -f build/docker/Dockerfile -t jubobe .

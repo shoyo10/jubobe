@@ -16,7 +16,10 @@ func (r *repo) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model
 	if opt != nil {
 		db = opt.Filter.Where(db)
 	}
-	result := db.Model(&model.Order{}).Updates(in)
+	d := model.Order{
+		Message: in.Message,
+	}
+	result := db.Model(&model.Order{}).Updates(d)
 	rawEffected, err := result.RowsAffected, result.Error
 	if err != nil {
 		errors.Wrapf(errors.ConvertPostgresError(err), "%v", err)
