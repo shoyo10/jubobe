@@ -21,3 +21,6 @@ local-deploy-up:
 
 local-deploy-down:
 	docker-compose -f deployment/docker-compose.yml down
+
+mockgen:
+	mockgen -source internal/service/interface.go -destination=internal/service/mocks/mock_service.go -package=mocks

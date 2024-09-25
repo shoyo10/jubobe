@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Order struct {
 	ID        int       `json:"id" gorm:"column:id;primaryKey;autoIncrement"`
@@ -12,4 +16,23 @@ type Order struct {
 
 func (*Order) TableName() string {
 	return "orders"
+}
+
+type OrderOption struct {
+	Filter OrderFilter
+}
+
+type OrderFilter struct {
+	ID int
+}
+
+func (o *OrderFilter) Where(db *gorm.DB) *gorm.DB {
+	if o.ID != 0 {
+		db = db.Where("id = ?", o.ID)
+	}
+	return db
+}
+
+type UpdateOrderInput struct {
+	Message string
 }

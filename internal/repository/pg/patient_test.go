@@ -86,11 +86,11 @@ func (s *patientDBSuite) TestListPatients() {
 	s.Equal("John Doe", patients[0].Name)
 
 	// test list with one patient and preload order
-	patients, err = s.repo.ListPatients(s.ctx, &repository.PatientOption{IsPreloadOrder: true})
+	patients, err = s.repo.ListPatients(s.ctx, &model.PatientOption{IsPreloadOrder: true})
 	s.Require().NoError(err)
 	s.Len(patients, 1)
 	s.Equal("John Doe", patients[0].Name)
-	s.Nil(patients[0].Order)
+	s.Zero(patients[0].Order.ID)
 
 	// test list with one patient and order
 	o := model.Order{
@@ -100,7 +100,7 @@ func (s *patientDBSuite) TestListPatients() {
 	err = s.conn.Create(&o).Error
 	s.Require().NoError(err)
 
-	patients, err = s.repo.ListPatients(s.ctx, &repository.PatientOption{IsPreloadOrder: true})
+	patients, err = s.repo.ListPatients(s.ctx, &model.PatientOption{IsPreloadOrder: true})
 	s.Require().NoError(err)
 	s.Len(patients, 1)
 	s.Equal("John Doe", patients[0].Name)

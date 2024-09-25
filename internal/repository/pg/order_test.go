@@ -105,10 +105,10 @@ func (s *orderDBSuite) TestUpdateOrder() {
 	s.Require().NoError(err)
 
 	newMessage := "test 654321"
-	orderOpt := &repository.OrderOption{
-		Filter: repository.OrderFilter{ID: order.ID},
+	orderOpt := &model.OrderOption{
+		Filter: model.OrderFilter{ID: order.ID},
 	}
-	err = s.repo.UpdateOrder(s.ctx, orderOpt, repository.UpdateOrderInput{Message: newMessage})
+	err = s.repo.UpdateOrder(s.ctx, orderOpt, model.UpdateOrderInput{Message: newMessage})
 	s.Require().NoError(err)
 
 	var order2 model.Order

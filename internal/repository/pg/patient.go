@@ -3,11 +3,10 @@ package pg
 import (
 	"context"
 	"jubobe/internal/model"
-	"jubobe/internal/repository"
 	"jubobe/pkg/errors"
 )
 
-func (r *repo) ListPatients(ctx context.Context, opt *repository.PatientOption) ([]model.Patient, error) {
+func (r *repo) ListPatients(ctx context.Context, opt *model.PatientOption) ([]model.Patient, error) {
 	var patients []model.Patient
 	db := r.Ctx(ctx)
 	if opt != nil {

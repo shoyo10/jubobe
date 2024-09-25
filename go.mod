@@ -6,6 +6,7 @@ require (
 	github.com/cenkalti/backoff/v3 v3.2.2
 	github.com/go-gormigrate/gormigrate/v2 v2.1.3
 	github.com/go-playground/validator v9.31.0+incompatible
+	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/mitchellh/mapstructure v1.5.0

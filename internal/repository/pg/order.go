@@ -3,7 +3,6 @@ package pg
 import (
 	"context"
 	"jubobe/internal/model"
-	"jubobe/internal/repository"
 	"jubobe/pkg/errors"
 
 	"gorm.io/gorm"
@@ -17,7 +16,7 @@ func (r *repo) CreateOrder(ctx context.Context, order *model.Order) error {
 	return nil
 }
 
-func (r *repo) UpdateOrder(ctx context.Context, opt *repository.OrderOption, in repository.UpdateOrderInput) error {
+func (r *repo) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model.UpdateOrderInput) error {
 	db := r.Ctx(ctx)
 	if opt != nil {
 		db = opt.Filter.Where(db)
