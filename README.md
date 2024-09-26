@@ -1,10 +1,14 @@
 # jubobe
 
-A RESTful jubo backend API application
+A RESTful jubo backend API application. Also, provide a simple UI to interactive with the backend server.
+
+Golang version: 1.21.6
+
+npm version: 10.2.5
 
 ## Makefile
 
-### Local run
+### Local run backend server
 
 First start PostgreSQL server
 
@@ -17,6 +21,18 @@ Second migrate database
 Third run API server
 
 `$ make jubobe`
+
+The server will listen on port 9090
+
+### Local run UI
+
+`$ cd ui/`
+
+`$ npm install`
+
+`$ npm start`
+
+And then you can open URL: http://localhost:3000 in your browser
 
 ### Run unit test
 
@@ -46,6 +62,7 @@ After running API server, a quick way to play the APIs is to open the swagger UI
 * pkg/zerolog: initialize zerolog
 * build/docker: docker build application image file
 * deployment: setting up some services needed for local development, such as PostgreSQL Server.
+* ui: provide simple ui to interactive with backend server.
 
 ## Core concept
 
