@@ -6,6 +6,7 @@ import (
 	"jubobe/pkg/errors"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -34,7 +35,7 @@ type listPatientsRespData struct {
 // @Title  ListPatients
 // @Description list all patients
 // @Success 200 {object} listPatientsResp
-// @Router /patients [get]
+// @Router /api/patients [get]
 func (h *handler) ListPatients(c echo.Context) error {
 	ctx := c.Request().Context()
 	opt := &model.PatientOption{
@@ -76,7 +77,7 @@ type createOrderRespData struct {
 // @Param reqBody body createOrderReq true "order fields"
 // @Success 200 {object} createOrderResp "order id"
 // @Failure 400 object errors.HTTPError
-// @Router /orders [post]
+// @Router /api/orders [post]
 func (h *handler) CreateOrder(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -116,7 +117,7 @@ type updateOrderParam struct {
 // @Success 200
 // @Failure 400 object errors.HTTPError
 // @Failure 404 object errors.HTTPError
-// @Router /orders/{id} [put]
+// @Router /api/orders/{id} [put]
 func (h *handler) UpdateOrder(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -152,4 +153,57 @@ func (h *handler) UpdateOrder(c echo.Context) error {
 		return err
 	}
 	return c.NoContent(http.StatusOK)
+}
+
+type getOrderParam struct {
+	ID int `param:"id" validate:"gte=1"`
+}
+
+type getOrderResp struct {
+	Data getOrderRespData `json:"Data"`
+}
+
+type getOrderRespData struct {
+	ID        int       `json:"Id"`
+	PatientID int       `json:"PatientId"`
+	Message   string    `json:"Message"`
+	CreatedAt time.Time `json:"CreatedAt"`
+	UpdatedAt time.Time `json:"UpdatedAt"`
+}
+
+// @Title  GetOrder
+// @Description get a order
+// @Param id path int true "order id"
+// @Success 200 {object} getOrderResp
+// @Failure 400 object errors.HTTPError
+// @Failure 404 object errors.HTTPError
+// @Router /api/orders/{id} [get]
+func (h *handler) GetOrder(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	var pathParam getOrderParam
+	err := (&echo.DefaultBinder{}).BindPathParams(c, &pathParam)
+	if err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+	if err := c.Validate(&pathParam); err != nil {
+		return errors.Wrap(errors.ErrInvalidInput, err.Error())
+	}
+
+	order, err := h.svc.GetOrder(ctx, &model.OrderOption{
+		Filter: model.OrderFilter{
+			ID: pathParam.ID,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	resp := getOrderRespData{
+		ID:        order.ID,
+		PatientID: order.PatientID,
+		Message:   order.Message,
+		CreatedAt: order.CreatedAt,
+		UpdatedAt: order.UpdatedAt,
+	}
+	return c.JSON(200, getOrderResp{Data: resp})
 }

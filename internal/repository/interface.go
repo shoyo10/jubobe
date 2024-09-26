@@ -17,4 +17,5 @@ type PatientRepo interface {
 type OrderRepo interface {
 	CreateOrder(ctx context.Context, order *model.Order) error
 	UpdateOrder(ctx context.Context, opt *model.OrderOption, in model.UpdateOrderInput) error
+	GetOrder(ctx context.Context, opt *model.OrderOption) (*model.Order, error)
 }

@@ -7,4 +7,5 @@ type Handler interface {
 	ListPatients(c echo.Context) error
 	CreateOrder(c echo.Context) error
 	UpdateOrder(c echo.Context) error
+	GetOrder(c echo.Context) error
 }

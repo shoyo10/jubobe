@@ -29,3 +29,16 @@ func (r *repo) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model
 	}
 	return nil
 }
+
+func (r *repo) GetOrder(ctx context.Context, opt *model.OrderOption) (*model.Order, error) {
+	db := r.Ctx(ctx)
+	if opt != nil {
+		db = opt.Filter.Where(db)
+	}
+	var order model.Order
+	err := db.First(&order).Error
+	if err != nil {
+		return nil, errors.Wrapf(errors.ConvertPostgresError(err), "%v", err)
+	}
+	return &order, nil
+}

@@ -18,7 +18,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/orders": {
+        "/api/orders": {
             "post": {
                 "description": "create a order",
                 "parameters": [
@@ -48,7 +48,39 @@ const docTemplate = `{
                 }
             }
         },
-        "/orders/{id}": {
+        "/api/orders/{id}": {
+            "get": {
+                "description": "get a order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "order id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.getOrderResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.HTTPError"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "update a order",
                 "parameters": [
@@ -88,7 +120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/patients": {
+        "/api/patients": {
             "get": {
                 "description": "list all patients",
                 "responses": {
@@ -139,6 +171,34 @@ const docTemplate = `{
             "properties": {
                 "Id": {
                     "type": "integer"
+                }
+            }
+        },
+        "http.getOrderResp": {
+            "type": "object",
+            "properties": {
+                "Data": {
+                    "$ref": "#/definitions/http.getOrderRespData"
+                }
+            }
+        },
+        "http.getOrderRespData": {
+            "type": "object",
+            "properties": {
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "Message": {
+                    "type": "string"
+                },
+                "PatientId": {
+                    "type": "integer"
+                },
+                "UpdatedAt": {
+                    "type": "string"
                 }
             }
         },

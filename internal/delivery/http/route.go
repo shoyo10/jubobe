@@ -16,7 +16,8 @@ import (
 
 // SetRoutes set routes
 func SetRoutes(e *echo.Echo, h Handler) {
-	e.GET("/patients", h.ListPatients)
-	e.POST("/orders", h.CreateOrder)
-	e.PUT("/orders/:id", h.UpdateOrder)
+	e.GET("/api/patients", h.ListPatients)
+	e.POST("/api/orders", h.CreateOrder)
+	e.PUT("/api/orders/:id", h.UpdateOrder)
+	e.GET("/api/orders/:id", h.GetOrder)
 }

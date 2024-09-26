@@ -66,7 +66,7 @@ func (s *handlerSuite) TestListPatients() {
 		},
 	}
 	s.mockSvc.EXPECT().ListPatients(gomock.Any(), gomock.Any()).Return(patients, nil)
-	rec := request(http.MethodGet, "/patients", nil, s.e)
+	rec := request(http.MethodGet, "/api/patients", nil, s.e)
 	var resp listPatientsResp
 	json.Unmarshal(rec.Body.Bytes(), &resp)
 	s.Require().Equal(http.StatusOK, rec.Code)
@@ -93,7 +93,7 @@ func (s *handlerSuite) TestCreateOrder() {
 		return nil
 	}).Times(1)
 	body, _ := json.Marshal(req)
-	rec := request(http.MethodPost, "/orders", bytes.NewReader(body), s.e)
+	rec := request(http.MethodPost, "/api/orders", bytes.NewReader(body), s.e)
 	s.Require().Equal(http.StatusOK, rec.Code)
 	var resp createOrderResp
 	json.Unmarshal(rec.Body.Bytes(), &resp)
@@ -114,8 +114,24 @@ func (s *handlerSuite) TestUpdateOrder() {
 	}
 	s.mockSvc.EXPECT().UpdateOrder(gomock.Any(), expectOpt, expectUpdateOrder).Return(nil).Times(1)
 	body, _ := json.Marshal(req)
-	rec := request(http.MethodPut, "/orders/1", bytes.NewReader(body), s.e)
+	rec := request(http.MethodPut, "/api/orders/1", bytes.NewReader(body), s.e)
 	s.Require().Equal(http.StatusOK, rec.Code)
+}
+
+func (s *handlerSuite) TestGetOrder() {
+	order := model.Order{
+		ID:        1,
+		PatientID: 1,
+		Message:   "Hello",
+	}
+	s.mockSvc.EXPECT().GetOrder(gomock.Any(), gomock.Any()).Return(&order, nil).Times(1)
+	rec := request(http.MethodGet, "/api/orders/1", nil, s.e)
+	s.Require().Equal(http.StatusOK, rec.Code)
+	var resp getOrderResp
+	json.Unmarshal(rec.Body.Bytes(), &resp)
+	s.Require().Equal(1, resp.Data.ID)
+	s.Require().Equal(1, resp.Data.PatientID)
+	s.Require().Equal("Hello", resp.Data.Message)
 }
 
 func request(method, path string, body io.Reader, e *echo.Echo) *httptest.ResponseRecorder {

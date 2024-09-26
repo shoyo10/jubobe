@@ -129,3 +129,31 @@ func (s *orderDBSuite) TestUpdateOrder() {
 	err = s.repo.UpdateOrder(s.ctx, orderOpt, model.UpdateOrderInput{Message: newMessage})
 	s.Require().True(errors.Is(err, errors.ErrResourceNotFound))
 }
+
+func (s *orderDBSuite) TestGetOrder() {
+	var p model.Patient
+	err := s.conn.First(&p).Error
+	s.Require().NoError(err)
+
+	order := &model.Order{
+		PatientID: p.ID,
+		Message:   "test 123456",
+	}
+	err = s.repo.CreateOrder(s.ctx, order)
+	s.Require().NoError(err)
+
+	orderOpt := &model.OrderOption{
+		Filter: model.OrderFilter{ID: order.ID},
+	}
+	order2, err := s.repo.GetOrder(s.ctx, orderOpt)
+	s.Require().NoError(err)
+	s.Equal(order.ID, order2.ID)
+	s.Equal(order.PatientID, order2.PatientID)
+	s.Equal(order.Message, order2.Message)
+
+	// get not exist order id
+	orderOpt.Filter.ID = 999
+	order2, err = s.repo.GetOrder(s.ctx, orderOpt)
+	s.Require().True(errors.Is(err, errors.ErrResourceNotFound))
+	s.Nil(order2)
+}

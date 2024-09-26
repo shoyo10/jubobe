@@ -49,6 +49,21 @@ func (mr *MockServicerMockRecorder) CreateOrder(ctx, order interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockServicer)(nil).CreateOrder), ctx, order)
 }
 
+// GetOrder mocks base method.
+func (m *MockServicer) GetOrder(ctx context.Context, opt *model.OrderOption) (*model.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOrder", ctx, opt)
+	ret0, _ := ret[0].(*model.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOrder indicates an expected call of GetOrder.
+func (mr *MockServicerMockRecorder) GetOrder(ctx, opt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrder", reflect.TypeOf((*MockServicer)(nil).GetOrder), ctx, opt)
+}
+
 // ListPatients mocks base method.
 func (m *MockServicer) ListPatients(ctx context.Context, opt *model.PatientOption) ([]model.Patient, error) {
 	m.ctrl.T.Helper()

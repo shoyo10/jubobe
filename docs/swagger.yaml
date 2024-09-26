@@ -26,6 +26,24 @@ definitions:
       Id:
         type: integer
     type: object
+  http.getOrderResp:
+    properties:
+      Data:
+        $ref: '#/definitions/http.getOrderRespData'
+    type: object
+  http.getOrderRespData:
+    properties:
+      CreatedAt:
+        type: string
+      Id:
+        type: integer
+      Message:
+        type: string
+      PatientId:
+        type: integer
+      UpdatedAt:
+        type: string
+    type: object
   http.listPatientsResp:
     properties:
       Data:
@@ -58,7 +76,7 @@ info:
   title: Jubobe API Document
   version: "1.0"
 paths:
-  /orders:
+  /api/orders:
     post:
       description: create a order
       parameters:
@@ -77,7 +95,28 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/errors.HTTPError'
-  /orders/{id}:
+  /api/orders/{id}:
+    get:
+      description: get a order
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.getOrderResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.HTTPError'
     put:
       description: update a order
       parameters:
@@ -103,7 +142,7 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/errors.HTTPError'
-  /patients:
+  /api/patients:
     get:
       description: list all patients
       responses:

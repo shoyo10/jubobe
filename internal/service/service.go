@@ -28,3 +28,7 @@ func (s *service) CreateOrder(ctx context.Context, order *model.Order) error {
 func (s *service) UpdateOrder(ctx context.Context, opt *model.OrderOption, in model.UpdateOrderInput) error {
 	return s.repo.UpdateOrder(ctx, opt, in)
 }
+
+func (s *service) GetOrder(ctx context.Context, opt *model.OrderOption) (*model.Order, error) {
+	return s.repo.GetOrder(ctx, opt)
+}
