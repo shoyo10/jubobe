@@ -56,7 +56,7 @@ export default function BasicList() {
     };
 
     return (
-        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <Box sx={{ width: '100%', maxWidth: 720, bgcolor: 'background.paper' }}>
             <nav aria-label="secondary mailbox folders">
                 <List>
                     {patients.map((patient) => (

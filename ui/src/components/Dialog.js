@@ -44,6 +44,8 @@ export default function DialogOrder(props) {
 
     return (
         <Dialog
+            fullWidth={true}
+            maxWidth="sm"
             onClose={handleClose}
             open={open}
             PaperProps={{
@@ -69,6 +71,7 @@ export default function DialogOrder(props) {
             <DialogContent>
                 {(showInput || patient.OrderId > 0) &&
                     <TextField
+                        fullWidth
                         id="outlined-multiline-static"
                         name="message"
                         label="請輸入醫囑"
